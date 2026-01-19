@@ -1,37 +1,126 @@
 import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
-import { Send, Mail, MapPin, Github, Linkedin } from "lucide-react";
+import { useRef, useState, useCallback } from "react";
+import { Send, Mail, MapPin, Github, Linkedin, MessageCircle, User, Bot, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+type Message = { role: "user" | "assistant"; content: string };
+
+const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/portfolio-chat`;
 
 const Contact = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const { toast } = useToast();
+  const scrollRef = useRef<HTMLDivElement>(null);
   
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([
+    { role: "assistant", content: "Hi! 👋 I'm John's AI assistant. Ask me anything about his skills, projects, or experience. How can I help you today?" }
+  ]);
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    
-    toast({
-      title: "Message sent!",
-      description: "Thank you for reaching out. I'll get back to you soon.",
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      if (scrollRef.current) {
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      }
+    }, 100);
+  };
+
+  const streamChat = useCallback(async (userMessages: Message[], onDelta: (text: string) => void, onDone: () => void) => {
+    const resp = await fetch(CHAT_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+      },
+      body: JSON.stringify({ messages: userMessages }),
     });
-    
-    setFormData({ name: "", email: "", message: "" });
-    setIsSubmitting(false);
+
+    if (!resp.ok || !resp.body) {
+      throw new Error("Failed to start stream");
+    }
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let textBuffer = "";
+    let streamDone = false;
+
+    while (!streamDone) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      textBuffer += decoder.decode(value, { stream: true });
+
+      let newlineIndex: number;
+      while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
+        let line = textBuffer.slice(0, newlineIndex);
+        textBuffer = textBuffer.slice(newlineIndex + 1);
+
+        if (line.endsWith("\r")) line = line.slice(0, -1);
+        if (line.startsWith(":") || line.trim() === "") continue;
+        if (!line.startsWith("data: ")) continue;
+
+        const jsonStr = line.slice(6).trim();
+        if (jsonStr === "[DONE]") {
+          streamDone = true;
+          break;
+        }
+
+        try {
+          const parsed = JSON.parse(jsonStr);
+          const content = parsed.choices?.[0]?.delta?.content as string | undefined;
+          if (content) onDelta(content);
+        } catch {
+          textBuffer = line + "\n" + textBuffer;
+          break;
+        }
+      }
+    }
+
+    onDone();
+  }, []);
+
+  const handleSend = async () => {
+    if (!input.trim() || isLoading) return;
+
+    const userMsg: Message = { role: "user", content: input.trim() };
+    setMessages(prev => [...prev, userMsg]);
+    setInput("");
+    setIsLoading(true);
+    scrollToBottom();
+
+    let assistantSoFar = "";
+    const upsertAssistant = (nextChunk: string) => {
+      assistantSoFar += nextChunk;
+      setMessages(prev => {
+        const last = prev[prev.length - 1];
+        if (last?.role === "assistant" && prev.length > 1 && prev[prev.length - 2]?.role === "user") {
+          return prev.map((m, i) => (i === prev.length - 1 ? { ...m, content: assistantSoFar } : m));
+        }
+        return [...prev, { role: "assistant", content: assistantSoFar }];
+      });
+      scrollToBottom();
+    };
+
+    try {
+      await streamChat(
+        [...messages, userMsg],
+        (chunk) => upsertAssistant(chunk),
+        () => setIsLoading(false)
+      );
+    } catch (e) {
+      console.error(e);
+      setMessages(prev => [...prev, { role: "assistant", content: "Sorry, I'm having trouble connecting right now. Please try again or contact John directly via email." }]);
+      setIsLoading(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
   };
 
   return (
@@ -58,11 +147,10 @@ const Contact = () => {
             transition={{ delay: 0.2 }}
             className="text-muted-foreground max-w-2xl mx-auto text-center mb-12"
           >
-            I'm currently looking for new opportunities. Whether you have a question,
-            a project idea, or just want to say hi, feel free to reach out!
+            Chat with my AI assistant to learn more about me, or reach out directly!
           </motion.p>
 
-          <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {/* Contact Info */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -112,73 +200,110 @@ const Contact = () => {
                   </motion.a>
                 </div>
               </div>
+
+              <div className="glass p-6 rounded-xl">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <MessageCircle size={18} className="text-primary" />
+                  Prefer Direct Contact?
+                </h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  For job opportunities, collaborations, or detailed discussions, feel free to email me directly.
+                </p>
+                <Button asChild className="w-full bg-gradient-primary hover:opacity-90">
+                  <a href="mailto:johndoe@email.com">
+                    <ExternalLink size={16} className="mr-2" />
+                    Contact Me Directly
+                  </a>
+                </Button>
+              </div>
             </motion.div>
 
-            {/* Contact Form */}
-            <motion.form
+            {/* AI Chatbox */}
+            <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
               transition={{ delay: 0.4 }}
-              onSubmit={handleSubmit}
-              className="glass p-6 rounded-xl space-y-4"
+              className="glass rounded-xl overflow-hidden flex flex-col h-[500px]"
             >
-              <div>
-                <label htmlFor="name" className="text-sm text-muted-foreground block mb-2">
-                  Name
-                </label>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Your name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
-                  className="bg-secondary border-border focus:border-primary"
-                />
+              {/* Chat Header */}
+              <div className="p-4 border-b border-border bg-secondary/50">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center">
+                    <Bot size={20} className="text-primary-foreground" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">John's AI Assistant</h3>
+                    <p className="text-xs text-muted-foreground">Ask me anything about John!</p>
+                  </div>
+                </div>
               </div>
-              <div>
-                <label htmlFor="email" className="text-sm text-muted-foreground block mb-2">
-                  Email
-                </label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="your@email.com"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
-                  className="bg-secondary border-border focus:border-primary"
-                />
+
+              {/* Messages */}
+              <ScrollArea ref={scrollRef} className="flex-1 p-4">
+                <div className="space-y-4">
+                  {messages.map((msg, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}
+                    >
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                        msg.role === "user" ? "bg-primary" : "bg-secondary"
+                      }`}>
+                        {msg.role === "user" ? (
+                          <User size={14} className="text-primary-foreground" />
+                        ) : (
+                          <Bot size={14} className="text-primary" />
+                        )}
+                      </div>
+                      <div className={`max-w-[80%] p-3 rounded-xl text-sm ${
+                        msg.role === "user" 
+                          ? "bg-primary text-primary-foreground rounded-tr-sm" 
+                          : "bg-secondary rounded-tl-sm"
+                      }`}>
+                        {msg.content}
+                      </div>
+                    </motion.div>
+                  ))}
+                  {isLoading && messages[messages.length - 1]?.role === "user" && (
+                    <div className="flex gap-3">
+                      <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
+                        <Bot size={14} className="text-primary" />
+                      </div>
+                      <div className="bg-secondary p-3 rounded-xl rounded-tl-sm">
+                        <div className="flex gap-1">
+                          <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                          <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                          <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </ScrollArea>
+
+              {/* Input */}
+              <div className="p-4 border-t border-border">
+                <div className="flex gap-2">
+                  <Input
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Ask about skills, projects..."
+                    className="bg-secondary border-border focus:border-primary"
+                    disabled={isLoading}
+                  />
+                  <Button 
+                    onClick={handleSend} 
+                    disabled={isLoading || !input.trim()}
+                    className="bg-gradient-primary hover:opacity-90"
+                  >
+                    <Send size={16} />
+                  </Button>
+                </div>
               </div>
-              <div>
-                <label htmlFor="message" className="text-sm text-muted-foreground block mb-2">
-                  Message
-                </label>
-                <Textarea
-                  id="message"
-                  placeholder="Your message..."
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  required
-                  rows={5}
-                  className="bg-secondary border-border focus:border-primary resize-none"
-                />
-              </div>
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-gradient-primary hover:opacity-90 transition-opacity"
-              >
-                {isSubmitting ? (
-                  "Sending..."
-                ) : (
-                  <>
-                    <Send size={16} className="mr-2" />
-                    Send Message
-                  </>
-                )}
-              </Button>
-            </motion.form>
+            </motion.div>
           </div>
         </motion.div>
       </div>
