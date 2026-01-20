@@ -1,10 +1,12 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { ExternalLink, Github, Folder } from "lucide-react";
+import { ExternalLink, Github, Folder, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const projects = [
   {
+    id: "library-management-system",
     title: "Library Management System",
     description:
       "A comprehensive system for managing library resources, including book cataloging, member management, borrowing/returning functionality, and overdue tracking.",
@@ -15,6 +17,7 @@ const projects = [
     featured: true,
   },
   {
+    id: "iot-water-quality-monitoring",
     title: "IoT Water Quality Monitoring",
     description:
       "An IoT-based solution that monitors water quality parameters in real-time using sensors, with data visualization and alert systems for contamination detection.",
@@ -25,6 +28,7 @@ const projects = [
     featured: true,
   },
   {
+    id: "route-finder-fare-estimator",
     title: "Route Finder & Fare Estimator",
     description:
       "A mobile-friendly web application that helps commuters find optimal routes and estimate transportation fares using local transit data.",
@@ -63,6 +67,7 @@ const ProjectCard = ({
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-foreground transition-colors"
               aria-label="View GitHub repository"
+              onClick={(e) => e.stopPropagation()}
             >
               <Github size={20} />
             </a>
@@ -74,6 +79,7 @@ const ProjectCard = ({
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-foreground transition-colors"
               aria-label="View live project"
+              onClick={(e) => e.stopPropagation()}
             >
               <ExternalLink size={20} />
             </a>
@@ -95,7 +101,7 @@ const ProjectCard = ({
       </p>
 
       {/* Technologies */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 mb-4">
         {project.technologies.map((tech) => (
           <span
             key={tech}
@@ -105,6 +111,15 @@ const ProjectCard = ({
           </span>
         ))}
       </div>
+
+      {/* View Details Link */}
+      <Link
+        to={`/project/${project.id}`}
+        className="inline-flex items-center gap-2 text-sm text-primary hover:underline group/link"
+      >
+        View Details
+        <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
+      </Link>
     </motion.article>
   );
 };

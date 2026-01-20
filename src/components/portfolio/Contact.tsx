@@ -1,13 +1,16 @@
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState, useCallback } from "react";
-import { Send, Mail, MapPin, Github, Linkedin, MessageCircle, User, Bot, ExternalLink } from "lucide-react";
+import { Send, Mail, MapPin, Github, Linkedin, MessageCircle, User, Bot, ChevronDown, ChevronUp, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { toast } from "sonner";
 
 type Message = { role: "user" | "assistant"; content: string };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/portfolio-chat`;
+const YOUR_EMAIL = "johndoe@email.com"; // Replace with your actual email
 
 const Contact = () => {
   const ref = useRef(null);
@@ -19,6 +22,11 @@ const Contact = () => {
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Direct contact form state
+  const [isDirectContactOpen, setIsDirectContactOpen] = useState(false);
+  const [directForm, setDirectForm] = useState({ name: "", email: "", message: "" });
+  const [isSendingDirect, setIsSendingDirect] = useState(false);
 
   const scrollToBottom = () => {
     setTimeout(() => {
@@ -123,6 +131,40 @@ const Contact = () => {
     }
   };
 
+  const handleDirectContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!directForm.name.trim() || !directForm.email.trim() || !directForm.message.trim()) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(directForm.email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    setIsSendingDirect(true);
+
+    // Open Gmail compose with pre-filled content
+    const subject = encodeURIComponent(`Portfolio Contact from ${directForm.name}`);
+    const body = encodeURIComponent(
+      `Name: ${directForm.name}\nEmail: ${directForm.email}\n\nMessage:\n${directForm.message}`
+    );
+    
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${YOUR_EMAIL}&su=${subject}&body=${body}`;
+    
+    // Open Gmail in new tab
+    window.open(gmailUrl, "_blank");
+    
+    toast.success("Gmail opened! Please send the email to complete your message.");
+    setDirectForm({ name: "", email: "", message: "" });
+    setIsSendingDirect(false);
+    setIsDirectContactOpen(false);
+  };
+
   return (
     <section id="contact" className="py-24 relative">
       <div className="absolute inset-0 bg-gradient-glow opacity-30" />
@@ -162,11 +204,11 @@ const Contact = () => {
                 <h3 className="text-lg font-semibold mb-4">Contact Information</h3>
                 <div className="space-y-4">
                   <a
-                    href="mailto:johndoe@email.com"
+                    href={`mailto:${YOUR_EMAIL}`}
                     className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors"
                   >
                     <Mail size={18} className="text-primary" />
-                    johndoe@email.com
+                    {YOUR_EMAIL}
                   </a>
                   <div className="flex items-center gap-3 text-muted-foreground">
                     <MapPin size={18} className="text-primary" />
@@ -201,20 +243,101 @@ const Contact = () => {
                 </div>
               </div>
 
-              <div className="glass p-6 rounded-xl">
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                  <MessageCircle size={18} className="text-primary" />
-                  Prefer Direct Contact?
-                </h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  For job opportunities, collaborations, or detailed discussions, feel free to email me directly.
-                </p>
-                <Button asChild className="w-full bg-gradient-primary hover:opacity-90">
-                  <a href="mailto:johndoe@email.com">
-                    <ExternalLink size={16} className="mr-2" />
-                    Contact Me Directly
-                  </a>
-                </Button>
+              {/* Direct Contact - Expandable */}
+              <div className="glass rounded-xl overflow-hidden">
+                <button
+                  onClick={() => setIsDirectContactOpen(!isDirectContactOpen)}
+                  className="w-full p-6 flex items-center justify-between hover:bg-secondary/50 transition-colors"
+                >
+                  <div className="flex items-center gap-2">
+                    <MessageCircle size={18} className="text-primary" />
+                    <h3 className="text-lg font-semibold">Prefer Direct Contact?</h3>
+                  </div>
+                  {isDirectContactOpen ? (
+                    <ChevronUp size={20} className="text-muted-foreground" />
+                  ) : (
+                    <ChevronDown size={20} className="text-muted-foreground" />
+                  )}
+                </button>
+                
+                <AnimatePresence>
+                  {isDirectContactOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      <form onSubmit={handleDirectContactSubmit} className="p-6 pt-0 space-y-4">
+                        <p className="text-sm text-muted-foreground mb-4">
+                          Fill out the form below and it will open Gmail with your message ready to send.
+                        </p>
+                        
+                        <div>
+                          <label htmlFor="direct-name" className="block text-sm font-medium mb-2">
+                            Your Name
+                          </label>
+                          <Input
+                            id="direct-name"
+                            value={directForm.name}
+                            onChange={(e) => setDirectForm(prev => ({ ...prev, name: e.target.value }))}
+                            placeholder="John Smith"
+                            className="bg-secondary border-border focus:border-primary"
+                            maxLength={100}
+                          />
+                        </div>
+                        
+                        <div>
+                          <label htmlFor="direct-email" className="block text-sm font-medium mb-2">
+                            Your Gmail / Email
+                          </label>
+                          <Input
+                            id="direct-email"
+                            type="email"
+                            value={directForm.email}
+                            onChange={(e) => setDirectForm(prev => ({ ...prev, email: e.target.value }))}
+                            placeholder="your.email@gmail.com"
+                            className="bg-secondary border-border focus:border-primary"
+                            maxLength={255}
+                          />
+                        </div>
+                        
+                        <div>
+                          <label htmlFor="direct-message" className="block text-sm font-medium mb-2">
+                            Message
+                          </label>
+                          <Textarea
+                            id="direct-message"
+                            value={directForm.message}
+                            onChange={(e) => setDirectForm(prev => ({ ...prev, message: e.target.value }))}
+                            placeholder="Your message here..."
+                            className="bg-secondary border-border focus:border-primary min-h-[100px]"
+                            maxLength={1000}
+                          />
+                        </div>
+                        
+                        <Button
+                          type="submit"
+                          disabled={isSendingDirect}
+                          className="w-full bg-gradient-primary hover:opacity-90"
+                        >
+                          {isSendingDirect ? (
+                            <>
+                              <Loader2 size={16} className="mr-2 animate-spin" />
+                              Opening Gmail...
+                            </>
+                          ) : (
+                            <>
+                              <Mail size={16} className="mr-2" />
+                              Send via Gmail
+                            </>
+                          )}
+                        </Button>
+                      </form>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </motion.div>
 
