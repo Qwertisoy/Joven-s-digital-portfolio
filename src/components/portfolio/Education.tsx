@@ -36,6 +36,14 @@ const certifications = [
   "Google IT Support Professional Certificate (In Progress)",
 ];
 
+const webinars = [
+  "Introduction to Cloud Computing - AWS",
+  "Web Development Best Practices 2024",
+  "Cybersecurity Fundamentals Workshop",
+  "Agile & Scrum for IT Projects",
+  "Database Design & Optimization Seminar",
+];
+
 const TimelineItem = ({
   item,
   index,
@@ -134,38 +142,75 @@ const Education = () => {
               </div>
             </div>
 
-            {/* Certifications Column */}
-            <div>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={isInView ? { opacity: 1 } : {}}
-                transition={{ delay: 0.2 }}
-                className="flex items-center gap-2 mb-6"
-              >
-                <Award className="text-primary" size={20} />
-                <h3 className="text-lg font-medium">Certifications</h3>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.4 }}
-                className="glass p-5 rounded-lg"
-              >
-                <ul className="space-y-3">
-                  {certifications.map((cert, index) => (
-                    <motion.li
-                      key={cert}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={isInView ? { opacity: 1, x: 0 } : {}}
-                      transition={{ delay: 0.5 + index * 0.1 }}
-                      className="flex items-start gap-2 text-sm text-muted-foreground"
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
-                      {cert}
-                    </motion.li>
-                  ))}
-                </ul>
-              </motion.div>
+            {/* Certifications & Webinars Column */}
+            <div className="space-y-6">
+              {/* Certifications */}
+              <div>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={isInView ? { opacity: 1 } : {}}
+                  transition={{ delay: 0.2 }}
+                  className="flex items-center gap-2 mb-4"
+                >
+                  <Award className="text-primary" size={20} />
+                  <h3 className="text-lg font-medium">Certifications</h3>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.4 }}
+                  className="glass p-5 rounded-lg"
+                >
+                  <ul className="space-y-3">
+                    {certifications.map((cert, index) => (
+                      <motion.li
+                        key={cert}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={isInView ? { opacity: 1, x: 0 } : {}}
+                        transition={{ delay: 0.5 + index * 0.1 }}
+                        className="flex items-start gap-2 text-sm text-muted-foreground"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
+                        {cert}
+                      </motion.li>
+                    ))}
+                  </ul>
+                </motion.div>
+              </div>
+
+              {/* Webinars */}
+              <div>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={isInView ? { opacity: 1 } : {}}
+                  transition={{ delay: 0.3 }}
+                  className="flex items-center gap-2 mb-4"
+                >
+                  <Award className="text-primary" size={20} />
+                  <h3 className="text-lg font-medium">Webinars & Seminars</h3>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.5 }}
+                  className="glass p-5 rounded-lg"
+                >
+                  <ul className="space-y-3">
+                    {webinars.map((webinar, index) => (
+                      <motion.li
+                        key={webinar}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={isInView ? { opacity: 1, x: 0 } : {}}
+                        transition={{ delay: 0.6 + index * 0.1 }}
+                        className="flex items-start gap-2 text-sm text-muted-foreground"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
+                        {webinar}
+                      </motion.li>
+                    ))}
+                  </ul>
+                </motion.div>
+              </div>
             </div>
           </div>
         </motion.div>
