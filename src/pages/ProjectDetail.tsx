@@ -27,6 +27,7 @@ The system was built using Java with a MySQL database backend, providing a robus
     date: "2023",
     challenges: "Implementing the complex borrowing logic with overdue tracking and fine calculations was challenging. I solved this by creating a scheduled task system that checks due dates daily.",
     outcome: "Successfully deployed for academic use, handling 500+ book records and 200+ member accounts.",
+    image: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=800&auto=format&fit=crop&q=80",
   },
   {
     id: "iot-water-quality-monitoring",
@@ -51,6 +52,7 @@ The backend was built with PHP and MySQL, while the frontend uses Bootstrap for 
     date: "2024",
     challenges: "Integrating hardware sensors with the web application required careful handling of serial communication and data parsing. I developed a reliable data transmission protocol to ensure accuracy.",
     outcome: "The system successfully monitored water quality in a local water treatment facility for a pilot test period of 3 months.",
+    image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop&q=80",
   },
   {
     id: "route-finder-fare-estimator",
@@ -75,6 +77,7 @@ This project aimed to solve a real-world problem faced by daily commuters in the
     date: "2023",
     challenges: "Calculating accurate fares across different transportation modes required extensive research and data collection. I built a fare matrix system that accounts for distance and vehicle type.",
     outcome: "The app has been tested by fellow students and received positive feedback for its accuracy and ease of use.",
+    image: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&auto=format&fit=crop&q=80",
   },
 ];
 
@@ -119,12 +122,26 @@ const ProjectDetail = () => {
             transition={{ duration: 0.6 }}
             className="max-w-4xl mx-auto"
           >
+            {/* Project Image */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.1 }}
+              className="mb-8 rounded-xl overflow-hidden"
+            >
+              <img
+                src={project.image}
+                alt={project.title}
+                className="w-full h-64 md:h-80 object-cover"
+              />
+            </motion.div>
+
             {/* Title & Meta */}
             <div className="mb-8">
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
+                transition={{ delay: 0.2 }}
                 className="text-4xl md:text-5xl font-bold mb-4"
               >
                 {project.title}
@@ -133,7 +150,7 @@ const ProjectDetail = () => {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
+                transition={{ delay: 0.3 }}
                 className="flex flex-wrap items-center gap-4 text-muted-foreground"
               >
                 <div className="flex items-center gap-2">
@@ -151,32 +168,43 @@ const ProjectDetail = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="flex flex-wrap gap-4 mb-10"
+              transition={{ delay: 0.4 }}
+              className="glass p-6 rounded-xl mb-10"
             >
-              {project.github && (
-                <Button asChild variant="outline" className="gap-2">
-                  <a href={project.github} target="_blank" rel="noopener noreferrer">
-                    <Github size={18} />
-                    View Code
-                  </a>
-                </Button>
-              )}
-              {project.live && (
-                <Button asChild className="bg-gradient-primary hover:opacity-90 gap-2">
-                  <a href={project.live} target="_blank" rel="noopener noreferrer">
-                    <ExternalLink size={18} />
-                    Live Demo
-                  </a>
-                </Button>
-              )}
+              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <ExternalLink size={18} className="text-primary" />
+                Project Links
+              </h3>
+              <div className="flex flex-wrap gap-4">
+                {project.github && (
+                  <Button asChild variant="outline" className="gap-2">
+                    <a href={project.github} target="_blank" rel="noopener noreferrer">
+                      <Github size={18} />
+                      View Source Code
+                    </a>
+                  </Button>
+                )}
+                {project.live ? (
+                  <Button asChild className="bg-gradient-primary hover:opacity-90 gap-2">
+                    <a href={project.live} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink size={18} />
+                      View Live App
+                    </a>
+                  </Button>
+                ) : (
+                  <span className="text-sm text-muted-foreground flex items-center gap-2 px-4 py-2 bg-secondary rounded-lg">
+                    <ExternalLink size={16} />
+                    No live demo available (Academic project)
+                  </span>
+                )}
+              </div>
             </motion.div>
 
             {/* Technologies */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
+              transition={{ delay: 0.5 }}
               className="mb-10"
             >
               <div className="flex items-center gap-2 mb-4">
@@ -199,7 +227,7 @@ const ProjectDetail = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
+              transition={{ delay: 0.6 }}
               className="glass p-8 rounded-xl mb-8"
             >
               <h2 className="text-xl font-semibold mb-4">About This Project</h2>
@@ -213,7 +241,7 @@ const ProjectDetail = () => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
+                transition={{ delay: 0.7 }}
                 className="glass p-6 rounded-xl"
               >
                 <h3 className="text-lg font-semibold mb-3 text-primary">Challenges</h3>
@@ -225,7 +253,7 @@ const ProjectDetail = () => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7 }}
+                transition={{ delay: 0.8 }}
                 className="glass p-6 rounded-xl"
               >
                 <h3 className="text-lg font-semibold mb-3 text-primary">Outcome</h3>

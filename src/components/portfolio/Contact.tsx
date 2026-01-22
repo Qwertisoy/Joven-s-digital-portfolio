@@ -193,11 +193,98 @@ const Contact = () => {
           </motion.p>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {/* Contact Info */}
+            {/* Left Column - AI Chatbox */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
               transition={{ delay: 0.3 }}
+              className="glass rounded-xl overflow-hidden flex flex-col h-[560px]"
+            >
+              {/* Chat Header */}
+              <div className="p-4 border-b border-border bg-secondary/50">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center">
+                    <Bot size={20} className="text-primary-foreground" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">John's AI Assistant</h3>
+                    <p className="text-xs text-muted-foreground">Ask me anything about John!</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Messages */}
+              <ScrollArea ref={scrollRef} className="flex-1 p-4">
+                <div className="space-y-4">
+                  {messages.map((msg, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}
+                    >
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                        msg.role === "user" ? "bg-primary" : "bg-secondary"
+                      }`}>
+                        {msg.role === "user" ? (
+                          <User size={14} className="text-primary-foreground" />
+                        ) : (
+                          <Bot size={14} className="text-primary" />
+                        )}
+                      </div>
+                      <div className={`max-w-[80%] p-3 rounded-xl text-sm ${
+                        msg.role === "user" 
+                          ? "bg-primary text-primary-foreground rounded-tr-sm" 
+                          : "bg-secondary rounded-tl-sm"
+                      }`}>
+                        {msg.content}
+                      </div>
+                    </motion.div>
+                  ))}
+                  {isLoading && messages[messages.length - 1]?.role === "user" && (
+                    <div className="flex gap-3">
+                      <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
+                        <Bot size={14} className="text-primary" />
+                      </div>
+                      <div className="bg-secondary p-3 rounded-xl rounded-tl-sm">
+                        <div className="flex gap-1">
+                          <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                          <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                          <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </ScrollArea>
+
+              {/* Input */}
+              <div className="p-4 border-t border-border">
+                <div className="flex gap-2">
+                  <Input
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Ask about skills, projects..."
+                    className="bg-secondary border-border focus:border-primary"
+                    disabled={isLoading}
+                  />
+                  <Button 
+                    onClick={handleSend} 
+                    disabled={isLoading || !input.trim()}
+                    className="bg-gradient-primary hover:opacity-90"
+                  >
+                    <Send size={18} />
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Right Column - Contact Info & Direct Contact */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={isInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ delay: 0.4 }}
               className="space-y-6"
             >
               <div className="glass p-6 rounded-xl">
@@ -338,93 +425,6 @@ const Contact = () => {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
-            </motion.div>
-
-            {/* AI Chatbox */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ delay: 0.4 }}
-              className="glass rounded-xl overflow-hidden flex flex-col h-[500px]"
-            >
-              {/* Chat Header */}
-              <div className="p-4 border-b border-border bg-secondary/50">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center">
-                    <Bot size={20} className="text-primary-foreground" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold">John's AI Assistant</h3>
-                    <p className="text-xs text-muted-foreground">Ask me anything about John!</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Messages */}
-              <ScrollArea ref={scrollRef} className="flex-1 p-4">
-                <div className="space-y-4">
-                  {messages.map((msg, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}
-                    >
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                        msg.role === "user" ? "bg-primary" : "bg-secondary"
-                      }`}>
-                        {msg.role === "user" ? (
-                          <User size={14} className="text-primary-foreground" />
-                        ) : (
-                          <Bot size={14} className="text-primary" />
-                        )}
-                      </div>
-                      <div className={`max-w-[80%] p-3 rounded-xl text-sm ${
-                        msg.role === "user" 
-                          ? "bg-primary text-primary-foreground rounded-tr-sm" 
-                          : "bg-secondary rounded-tl-sm"
-                      }`}>
-                        {msg.content}
-                      </div>
-                    </motion.div>
-                  ))}
-                  {isLoading && messages[messages.length - 1]?.role === "user" && (
-                    <div className="flex gap-3">
-                      <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
-                        <Bot size={14} className="text-primary" />
-                      </div>
-                      <div className="bg-secondary p-3 rounded-xl rounded-tl-sm">
-                        <div className="flex gap-1">
-                          <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                          <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                          <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </ScrollArea>
-
-              {/* Input */}
-              <div className="p-4 border-t border-border">
-                <div className="flex gap-2">
-                  <Input
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    placeholder="Ask about skills, projects..."
-                    className="bg-secondary border-border focus:border-primary"
-                    disabled={isLoading}
-                  />
-                  <Button 
-                    onClick={handleSend} 
-                    disabled={isLoading || !input.trim()}
-                    className="bg-gradient-primary hover:opacity-90"
-                  >
-                    <Send size={16} />
-                  </Button>
-                </div>
               </div>
             </motion.div>
           </div>
