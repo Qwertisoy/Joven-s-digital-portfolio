@@ -1,10 +1,9 @@
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useRef, useState, useCallback } from "react";
-import { Send, Mail, MapPin, Github, Linkedin, MessageCircle, User, Bot, ChevronDown, ChevronUp, Loader2 } from "lucide-react";
+import { Send, Mail, MapPin, Github, Linkedin, MessageCircle, User, Bot, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 
 type Message = { role: "user" | "assistant"; content: string };
@@ -15,7 +14,7 @@ const YOUR_EMAIL = "johndoe@email.com"; // Replace with your actual email
 const Contact = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   
   const [messages, setMessages] = useState<Message[]>([
     { role: "assistant", content: "Hi! 👋 I'm John's AI assistant. Ask me anything about his skills, projects, or experience. How can I help you today?" }
@@ -24,15 +23,13 @@ const Contact = () => {
   const [isLoading, setIsLoading] = useState(false);
   
   // Direct contact form state
-  const [isDirectContactOpen, setIsDirectContactOpen] = useState(false);
+  const [isDirectContactOpen, setIsDirectContactOpen] = useState(true);
   const [directForm, setDirectForm] = useState({ name: "", email: "", message: "" });
   const [isSendingDirect, setIsSendingDirect] = useState(false);
 
   const scrollToBottom = () => {
     setTimeout(() => {
-      if (scrollRef.current) {
-        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-      }
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, 100);
   };
 
@@ -192,13 +189,13 @@ const Contact = () => {
             Chat with my AI assistant to learn more about me, or reach out directly!
           </motion.p>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch">
             {/* Left Column - AI Chatbox */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
               transition={{ delay: 0.3 }}
-              className="glass rounded-xl overflow-hidden flex flex-col h-[560px]"
+              className="glass rounded-xl overflow-hidden flex flex-col min-h-[500px]"
             >
               {/* Chat Header */}
               <div className="p-4 border-b border-border bg-secondary/50">
@@ -214,7 +211,7 @@ const Contact = () => {
               </div>
 
               {/* Messages */}
-              <ScrollArea ref={scrollRef} className="flex-1 p-4">
+              <div className="flex-1 overflow-y-auto p-4">
                 <div className="space-y-4">
                   {messages.map((msg, i) => (
                     <motion.div
@@ -255,8 +252,9 @@ const Contact = () => {
                       </div>
                     </div>
                   )}
+                  <div ref={messagesEndRef} />
                 </div>
-              </ScrollArea>
+              </div>
 
               {/* Input */}
               <div className="p-4 border-t border-border">
@@ -285,146 +283,125 @@ const Contact = () => {
               initial={{ opacity: 0, x: 30 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
               transition={{ delay: 0.4 }}
-              className="space-y-6"
+              className="flex flex-col h-full"
             >
-              <div className="glass p-6 rounded-xl">
-                <h3 className="text-lg font-semibold mb-4">Contact Information</h3>
-                <div className="space-y-4">
-                  <a
-                    href={`mailto:${YOUR_EMAIL}`}
-                    className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors"
-                  >
+              <div className="glass p-4 rounded-xl mb-4">
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
                     <Mail size={18} className="text-primary" />
-                    {YOUR_EMAIL}
-                  </a>
-                  <div className="flex items-center gap-3 text-muted-foreground">
+                    <a
+                      href={`mailto:${YOUR_EMAIL}`}
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {YOUR_EMAIL}
+                    </a>
+                  </div>
+                  <div className="flex items-center gap-3">
                     <MapPin size={18} className="text-primary" />
-                    Metro Manila, Philippines
+                    <span className="text-sm text-muted-foreground">Metro Manila, Philippines</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <motion.a
+                      href="https://github.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 rounded-lg bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <Github size={18} />
+                    </motion.a>
+                    <motion.a
+                      href="https://linkedin.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 rounded-lg bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <Linkedin size={18} />
+                    </motion.a>
                   </div>
                 </div>
               </div>
 
-              <div className="glass p-6 rounded-xl">
-                <h3 className="text-lg font-semibold mb-4">Connect With Me</h3>
-                <div className="flex gap-4">
-                  <motion.a
-                    href="https://github.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3 rounded-lg bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Github size={20} />
-                  </motion.a>
-                  <motion.a
-                    href="https://linkedin.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3 rounded-lg bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Linkedin size={20} />
-                  </motion.a>
-                </div>
-              </div>
-
-              {/* Direct Contact - Expandable */}
-              <div className="glass rounded-xl overflow-hidden">
-                <button
-                  onClick={() => setIsDirectContactOpen(!isDirectContactOpen)}
-                  className="w-full p-6 flex items-center justify-between hover:bg-secondary/50 transition-colors"
-                >
+              {/* Direct Contact - Always expanded to match chatbox height */}
+              <div className="glass rounded-xl overflow-hidden flex-1 flex flex-col">
+                <div className="p-4 border-b border-border bg-secondary/50">
                   <div className="flex items-center gap-2">
                     <MessageCircle size={18} className="text-primary" />
-                    <h3 className="text-lg font-semibold">Prefer Direct Contact?</h3>
+                    <h3 className="font-semibold">Send Direct Message</h3>
                   </div>
-                  {isDirectContactOpen ? (
-                    <ChevronUp size={20} className="text-muted-foreground" />
-                  ) : (
-                    <ChevronDown size={20} className="text-muted-foreground" />
-                  )}
-                </button>
+                </div>
                 
-                <AnimatePresence>
-                  {isDirectContactOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="overflow-hidden"
-                    >
-                      <form onSubmit={handleDirectContactSubmit} className="p-6 pt-0 space-y-4">
-                        <p className="text-sm text-muted-foreground mb-4">
-                          Fill out the form below and it will open Gmail with your message ready to send.
-                        </p>
-                        
-                        <div>
-                          <label htmlFor="direct-name" className="block text-sm font-medium mb-2">
-                            Your Name
-                          </label>
-                          <Input
-                            id="direct-name"
-                            value={directForm.name}
-                            onChange={(e) => setDirectForm(prev => ({ ...prev, name: e.target.value }))}
-                            placeholder="John Smith"
-                            className="bg-secondary border-border focus:border-primary"
-                            maxLength={100}
-                          />
-                        </div>
-                        
-                        <div>
-                          <label htmlFor="direct-email" className="block text-sm font-medium mb-2">
-                            Your Gmail / Email
-                          </label>
-                          <Input
-                            id="direct-email"
-                            type="email"
-                            value={directForm.email}
-                            onChange={(e) => setDirectForm(prev => ({ ...prev, email: e.target.value }))}
-                            placeholder="your.email@gmail.com"
-                            className="bg-secondary border-border focus:border-primary"
-                            maxLength={255}
-                          />
-                        </div>
-                        
-                        <div>
-                          <label htmlFor="direct-message" className="block text-sm font-medium mb-2">
-                            Message
-                          </label>
-                          <Textarea
-                            id="direct-message"
-                            value={directForm.message}
-                            onChange={(e) => setDirectForm(prev => ({ ...prev, message: e.target.value }))}
-                            placeholder="Your message here..."
-                            className="bg-secondary border-border focus:border-primary min-h-[100px]"
-                            maxLength={1000}
-                          />
-                        </div>
-                        
-                        <Button
-                          type="submit"
-                          disabled={isSendingDirect}
-                          className="w-full bg-gradient-primary hover:opacity-90"
-                        >
-                          {isSendingDirect ? (
-                            <>
-                              <Loader2 size={16} className="mr-2 animate-spin" />
-                              Opening Gmail...
-                            </>
-                          ) : (
-                            <>
-                              <Mail size={16} className="mr-2" />
-                              Send via Gmail
-                            </>
-                          )}
-                        </Button>
-                      </form>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <form onSubmit={handleDirectContactSubmit} className="p-4 flex-1 flex flex-col">
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Fill out the form below and it will open Gmail with your message ready to send.
+                  </p>
+                  
+                  <div className="space-y-4 flex-1">
+                    <div>
+                      <label htmlFor="direct-name" className="block text-sm font-medium mb-2">
+                        Your Name
+                      </label>
+                      <Input
+                        id="direct-name"
+                        value={directForm.name}
+                        onChange={(e) => setDirectForm(prev => ({ ...prev, name: e.target.value }))}
+                        placeholder="John Smith"
+                        className="bg-secondary border-border focus:border-primary"
+                        maxLength={100}
+                      />
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="direct-email" className="block text-sm font-medium mb-2">
+                        Your Email
+                      </label>
+                      <Input
+                        id="direct-email"
+                        type="email"
+                        value={directForm.email}
+                        onChange={(e) => setDirectForm(prev => ({ ...prev, email: e.target.value }))}
+                        placeholder="your.email@gmail.com"
+                        className="bg-secondary border-border focus:border-primary"
+                        maxLength={255}
+                      />
+                    </div>
+                    
+                    <div className="flex-1">
+                      <label htmlFor="direct-message" className="block text-sm font-medium mb-2">
+                        Message
+                      </label>
+                      <Textarea
+                        id="direct-message"
+                        value={directForm.message}
+                        onChange={(e) => setDirectForm(prev => ({ ...prev, message: e.target.value }))}
+                        placeholder="Your message here..."
+                        className="bg-secondary border-border focus:border-primary min-h-[120px]"
+                        maxLength={1000}
+                      />
+                    </div>
+                  </div>
+                  
+                  <Button
+                    type="submit"
+                    disabled={isSendingDirect}
+                    className="w-full bg-gradient-primary hover:opacity-90 mt-4"
+                  >
+                    {isSendingDirect ? (
+                      <>
+                        <Loader2 size={16} className="mr-2 animate-spin" />
+                        Opening Gmail...
+                      </>
+                    ) : (
+                      <>
+                        <Mail size={16} className="mr-2" />
+                        Send via Gmail
+                      </>
+                    )}
+                  </Button>
+                </form>
               </div>
             </motion.div>
           </div>
