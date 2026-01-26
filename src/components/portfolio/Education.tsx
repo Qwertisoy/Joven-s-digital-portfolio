@@ -6,26 +6,19 @@ const education = [
   {
     type: "education",
     title: "Bachelor of Science in Information Technology",
-    institution: "University of Technology",
-    period: "2021 - Present (Expected 2025)",
-    description: "Focus on software development, database management, and IT infrastructure. Dean's Lister for academic excellence.",
+    institution: "Pateros Technological College",
+    period: "2022 - Present (Expected 2026)",
+    description: "Focus on software development, database management, and IT infrastructure. School Scholar, Pasig City Scholar.",
   },
 ];
 
 const experience = [
   {
     type: "experience",
-    title: "IT Intern",
-    institution: "Tech Solutions Inc.",
-    period: "Summer 2024",
-    description: "Assisted in network maintenance, hardware troubleshooting, and software installation. Gained hands-on experience with enterprise IT systems.",
-  },
-  {
-    type: "experience",
-    title: "Freelance Web Developer",
-    institution: "Self-Employed",
-    period: "2023 - Present",
-    description: "Developed simple websites for local businesses using HTML, CSS, and JavaScript. Managed client requirements and project timelines.",
+    title: "Data Encoder",
+    institution: "K2 Network",
+    period: "Summer 2015-2016",
+    description: "Assisted with basic data entry and account management tasks. Responsibilities included encoding company information into Excel spreadsheets, creating user accounts, and performing log‑in/log‑out procedures to support system accuracy. Gained hands‑on practice with organizing data, maintaining records, and following standard processes for account handling.",
   },
 ];
 
@@ -37,10 +30,8 @@ const certifications = [
 ];
 
 const webinars = [
-  "Introduction to Cloud Computing - AWS",
   "Web Development Best Practices 2024",
   "Cybersecurity Fundamentals Workshop",
-  "Agile & Scrum for IT Projects",
   "Database Design & Optimization Seminar",
 ];
 
@@ -62,7 +53,7 @@ const TimelineItem = ({
     >
       {/* Dot */}
       <div className="absolute left-0 top-0 -translate-x-1/2 w-3 h-3 rounded-full bg-primary shadow-glow" />
-      
+
       {/* Content */}
       <div className="glass p-5 rounded-lg">
         <div className="flex items-start justify-between flex-wrap gap-2 mb-2">

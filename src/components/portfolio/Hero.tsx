@@ -11,9 +11,9 @@ const Hero = () => {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Glow */}
       <div className="absolute inset-0 bg-gradient-glow opacity-50 animate-pulse-glow" />
-      
+
       {/* Grid Pattern */}
-      <div 
+      <div
         className="absolute inset-0 opacity-[0.03]"
         style={{
           backgroundImage: `linear-gradient(hsl(var(--foreground)) 1px, transparent 1px),
@@ -41,8 +41,8 @@ const Hero = () => {
                 <div className="w-full h-full rounded-full bg-background flex items-center justify-center overflow-hidden">
                   {/* Replace this with your actual image */}
                   <img
-                    src="/placeholder.svg"
-                    alt="John Doe - BSIT Student"
+                    src="/12345joven.jpg"
+                    alt="Joven P. Benagua - BSIT Student"
                     className="w-full h-full object-cover rounded-full"
                   />
                 </div>
@@ -71,7 +71,7 @@ const Hero = () => {
             className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6"
           >
             Hi, I'm{" "}
-            <span className="text-gradient">John Doe</span>
+            <span className="text-gradient">Joven P. Benagua</span>
           </motion.h1>
 
           {/* Tagline */}
@@ -81,7 +81,7 @@ const Hero = () => {
             transition={{ delay: 0.4 }}
             className="text-xl md:text-2xl text-muted-foreground mb-4"
           >
-            BSIT Student | Aspiring IT Support & Systems Specialist
+            BSIT Student | Ready to take on challenges
           </motion.p>
 
           {/* Description */}
@@ -91,8 +91,8 @@ const Hero = () => {
             transition={{ delay: 0.5 }}
             className="text-lg text-muted-foreground/80 max-w-2xl mx-auto mb-10"
           >
-            Passionate about technology, problem-solving, and building efficient systems. 
-            Currently exploring databases, networking, and software development to create 
+            Passionate about technology, problem-solving, and building efficient systems.
+            Currently exploring databases, networking, and software development to create
             impactful solutions.
           </motion.p>
 
@@ -117,7 +117,7 @@ const Hero = () => {
               className="border-border hover:bg-secondary gap-2"
               asChild
             >
-              <a href="/resume.pdf" download>
+              <a href="/Resume.pdf" download>
                 Download Resume
               </a>
             </Button>
@@ -131,9 +131,9 @@ const Hero = () => {
             className="flex items-center justify-center gap-4"
           >
             {[
-              { icon: Github, href: "https://github.com", label: "GitHub" },
-              { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-              { icon: Mail, href: "mailto:johndoe@email.com", label: "Email" },
+              { icon: Github, href: "https://github.com/Qwetisoy", label: "GitHub" },
+              { icon: Linkedin, href: "https://linkedin.com/in/jovenbenagua", label: "LinkedIn" },
+              { icon: Mail, href: "mailto:jovenpbenagua@email.com", label: "Email" },
             ].map(({ icon: Icon, href, label }) => (
               <motion.a
                 key={label}

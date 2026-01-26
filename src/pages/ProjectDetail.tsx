@@ -48,7 +48,7 @@ The backend was built with PHP and MySQL, while the frontend uses Bootstrap for 
     technologies: ["Arduino", "PHP", "MySQL", "Bootstrap", "JavaScript"],
     role: "Backend Developer & System Integration",
     github: "https://github.com",
-    live: null,
+    live: "https://example.com",
     date: "2024",
     challenges: "Integrating hardware sensors with the web application required careful handling of serial communication and data parsing. I developed a reliable data transmission protocol to ensure accuracy.",
     outcome: "The system successfully monitored water quality in a local water treatment facility for a pilot test period of 3 months.",
@@ -73,7 +73,7 @@ This project aimed to solve a real-world problem faced by daily commuters in the
     technologies: ["HTML", "CSS", "JavaScript", "Google Maps API"],
     role: "Frontend Developer",
     github: "https://github.com",
-    live: "https://example.com",
+    live: "https://routemateapp.vercel.app/",
     date: "2023",
     challenges: "Calculating accurate fares across different transportation modes required extensive research and data collection. I built a fare matrix system that accounts for distance and vehicle type.",
     outcome: "The app has been tested by fellow students and received positive feedback for its accuracy and ease of use.",
@@ -146,7 +146,7 @@ const ProjectDetail = () => {
               >
                 {project.title}
               </motion.h1>
-              
+
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -171,29 +171,25 @@ const ProjectDetail = () => {
               transition={{ delay: 0.4 }}
               className="glass p-6 rounded-xl mb-10"
             >
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <ExternalLink size={18} className="text-primary" />
+              <h3 className="text-lg font-semibold mb-4">
                 Project Links
               </h3>
               <div className="flex flex-wrap gap-4">
                 {project.github && (
-                  <Button asChild variant="outline" className="gap-2">
+                  <Button asChild variant="outline">
                     <a href={project.github} target="_blank" rel="noopener noreferrer">
-                      <Github size={18} />
                       View Source Code
                     </a>
                   </Button>
                 )}
                 {project.live ? (
-                  <Button asChild className="bg-gradient-primary hover:opacity-90 gap-2">
+                  <Button asChild className="bg-gradient-primary hover:opacity-90">
                     <a href={project.live} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink size={18} />
                       View Live App
                     </a>
                   </Button>
                 ) : (
-                  <span className="text-sm text-muted-foreground flex items-center gap-2 px-4 py-2 bg-secondary rounded-lg">
-                    <ExternalLink size={16} />
+                  <span className="text-sm text-muted-foreground px-4 py-2 bg-secondary rounded-lg">
                     No live demo available (Academic project)
                   </span>
                 )}

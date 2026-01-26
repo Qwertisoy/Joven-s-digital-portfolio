@@ -6,31 +6,31 @@ const skillSections = [
   {
     icon: Code2,
     title: "Development",
-    description: "Proficient in building web interfaces with HTML and CSS, creating structured and visually appealing layouts. Experienced in Java programming for backend logic and application development, with a focus on clean, maintainable code.",
+    description: "Learning to build web pages using HTML and CSS, creating simple and clear layouts. Practicing Java for basic backend programs and starting to explore JavaScript for interactive features.",
     tags: ["HTML", "CSS", "Java", "JavaScript Basics"],
   },
   {
     icon: Database,
     title: "Database & Systems",
-    description: "Skilled in MySQL database design, management, and optimization. Experienced with relational database concepts, query writing, and data modeling to support robust application backends.",
-    tags: ["MySQL", "Database Design", "SQL Queries", "Data Modeling"],
+    description: "Basic knowledge of MySQL for creating and managing small databases. Can write simple SQL queries and beginning to understand how databases support applications.",
+    tags: ["MySQL", "Database Basics", "SQL Queries", "Data Modeling (Beginner)"],
   },
   {
     icon: Globe,
     title: "Networking",
     description: "Foundational knowledge in networking concepts including TCP/IP, DNS, and basic network troubleshooting. Familiar with network architecture and protocols essential for IT support roles.",
-    tags: ["TCP/IP", "DNS", "Troubleshooting", "Network Basics"],
+    tags: ["TCP/IP", "DNS", "Troubleshooting", "Network Fundamentals"],
   },
   {
     icon: Wrench,
     title: "Tools & Technologies",
-    description: "Comfortable working with modern development tools and environments. Proficient in VS Code for coding, XAMPP for local server setup, MySQL Workbench for database management, and Git for version control.",
+    description: "Comfortable using VS Code for coding practice. Can set up a local server with XAMPP. Using MySQL Workbench for database tasks and learning Git for version control. Experienced with Microsoft Office for documents and presentations.",
     tags: ["VS Code", "XAMPP", "MySQL Workbench", "Git", "Microsoft Office"],
   },
   {
     icon: Terminal,
     title: "IT Support",
-    description: "Passionate about providing technical support and troubleshooting. Experienced in diagnosing hardware and software issues, system maintenance, and helping users resolve technical problems efficiently.",
+    description: "Enjoy helping with basic computer problems. Can do simple system maintenance like updates and installations. Learning how to document solutions and provide clear instructions.",
     tags: ["Troubleshooting", "System Maintenance", "Technical Support", "Documentation"],
   },
   {
@@ -86,11 +86,11 @@ const Skills = () => {
                   </div>
                   <h3 className="text-lg font-semibold pt-2">{section.title}</h3>
                 </div>
-                
+
                 <p className="text-muted-foreground text-sm leading-relaxed mb-4">
                   {section.description}
                 </p>
-                
+
                 <div className="flex flex-wrap gap-2">
                   {section.tags.map((tag) => (
                     <span

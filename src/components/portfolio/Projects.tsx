@@ -24,7 +24,7 @@ const projects = [
     technologies: ["Arduino", "PHP", "MySQL", "Bootstrap"],
     role: "Backend Developer & System Integration",
     github: "https://github.com",
-    live: null,
+    live: "https://example.com",
     featured: true,
   },
   {
@@ -35,7 +35,7 @@ const projects = [
     technologies: ["HTML", "CSS", "JavaScript", "Google Maps API"],
     role: "Frontend Developer",
     github: "https://github.com",
-    live: "https://example.com",
+    live: "https://routemate-final.vercel.app/",
     featured: true,
   },
 ];
@@ -72,18 +72,7 @@ const ProjectCard = ({
               <Github size={20} />
             </a>
           )}
-          {project.live && (
-            <a
-              href={project.live}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="View live project"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <ExternalLink size={20} />
-            </a>
-          )}
+
         </div>
       </div>
 
@@ -131,7 +120,7 @@ const Projects = () => {
   return (
     <section id="projects" className="py-24 relative">
       <div className="absolute inset-0 bg-gradient-glow opacity-20" />
-      
+
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
           ref={ref}
