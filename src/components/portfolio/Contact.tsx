@@ -8,20 +8,20 @@ import { toast } from "sonner";
 
 type Message = { role: "user" | "assistant"; content: string };
 
-const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/portfolio-chat`;
-const YOUR_EMAIL = "johndoe@email.com"; // Replace with your actual email
+const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/joven-ai`;
+const YOUR_EMAIL = "Jovenpbenagua@email.com"; // Replace with your actual email
 
 const Contact = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  
+
   const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", content: "Hi! 👋 I'm John's AI assistant. Ask me anything about his skills, projects, or experience. How can I help you today?" }
+    { role: "assistant", content: "Hi! 👋 I'm Joven's AI assistant. Ask me anything about his skills, projects, or experience. How can I help you today?" }
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Direct contact form state
   const [isDirectContactOpen, setIsDirectContactOpen] = useState(true);
   const [directForm, setDirectForm] = useState({ name: "", email: "", message: "" });
@@ -130,7 +130,7 @@ const Contact = () => {
 
   const handleDirectContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!directForm.name.trim() || !directForm.email.trim() || !directForm.message.trim()) {
       toast.error("Please fill in all fields");
       return;
@@ -150,12 +150,12 @@ const Contact = () => {
     const body = encodeURIComponent(
       `Name: ${directForm.name}\nEmail: ${directForm.email}\n\nMessage:\n${directForm.message}`
     );
-    
+
     const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${YOUR_EMAIL}&su=${subject}&body=${body}`;
-    
+
     // Open Gmail in new tab
     window.open(gmailUrl, "_blank");
-    
+
     toast.success("Gmail opened! Please send the email to complete your message.");
     setDirectForm({ name: "", email: "", message: "" });
     setIsSendingDirect(false);
@@ -165,7 +165,7 @@ const Contact = () => {
   return (
     <section id="contact" className="py-24 relative">
       <div className="absolute inset-0 bg-gradient-glow opacity-30" />
-      
+
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
           ref={ref}
@@ -204,8 +204,8 @@ const Contact = () => {
                     <Bot size={20} className="text-primary-foreground" />
                   </div>
                   <div>
-                    <h3 className="font-semibold">John's AI Assistant</h3>
-                    <p className="text-xs text-muted-foreground">Ask me anything about John!</p>
+                    <h3 className="font-semibold">Joven's AI Assistant</h3>
+                    <p className="text-xs text-muted-foreground">Ask me anything about Joven!</p>
                   </div>
                 </div>
               </div>
@@ -220,20 +220,18 @@ const Contact = () => {
                       animate={{ opacity: 1, y: 0 }}
                       className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}
                     >
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                        msg.role === "user" ? "bg-primary" : "bg-secondary"
-                      }`}>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${msg.role === "user" ? "bg-primary" : "bg-secondary"
+                        }`}>
                         {msg.role === "user" ? (
                           <User size={14} className="text-primary-foreground" />
                         ) : (
                           <Bot size={14} className="text-primary" />
                         )}
                       </div>
-                      <div className={`max-w-[80%] p-3 rounded-xl text-sm ${
-                        msg.role === "user" 
-                          ? "bg-primary text-primary-foreground rounded-tr-sm" 
-                          : "bg-secondary rounded-tl-sm"
-                      }`}>
+                      <div className={`max-w-[80%] p-3 rounded-xl text-sm ${msg.role === "user"
+                        ? "bg-primary text-primary-foreground rounded-tr-sm"
+                        : "bg-secondary rounded-tl-sm"
+                        }`}>
                         {msg.content}
                       </div>
                     </motion.div>
@@ -267,8 +265,8 @@ const Contact = () => {
                     className="bg-secondary border-border focus:border-primary"
                     disabled={isLoading}
                   />
-                  <Button 
-                    onClick={handleSend} 
+                  <Button
+                    onClick={handleSend}
                     disabled={isLoading || !input.trim()}
                     className="bg-gradient-primary hover:opacity-90"
                   >
@@ -333,12 +331,12 @@ const Contact = () => {
                     <h3 className="font-semibold">Send Direct Message</h3>
                   </div>
                 </div>
-                
+
                 <form onSubmit={handleDirectContactSubmit} className="p-4 flex-1 flex flex-col">
                   <p className="text-sm text-muted-foreground mb-4">
                     Fill out the form below and it will open Gmail with your message ready to send.
                   </p>
-                  
+
                   <div className="space-y-4 flex-1">
                     <div>
                       <label htmlFor="direct-name" className="block text-sm font-medium mb-2">
@@ -353,7 +351,7 @@ const Contact = () => {
                         maxLength={100}
                       />
                     </div>
-                    
+
                     <div>
                       <label htmlFor="direct-email" className="block text-sm font-medium mb-2">
                         Your Email
@@ -368,7 +366,7 @@ const Contact = () => {
                         maxLength={255}
                       />
                     </div>
-                    
+
                     <div className="flex-1">
                       <label htmlFor="direct-message" className="block text-sm font-medium mb-2">
                         Message
@@ -383,7 +381,7 @@ const Contact = () => {
                       />
                     </div>
                   </div>
-                  
+
                   <Button
                     type="submit"
                     disabled={isSendingDirect}
