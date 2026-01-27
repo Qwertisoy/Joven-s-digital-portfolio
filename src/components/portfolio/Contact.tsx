@@ -8,7 +8,7 @@ import { toast } from "sonner";
 
 type Message = { role: "user" | "assistant"; content: string };
 
-const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/joven-ai`;
+const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/portfolio-chat`;
 const YOUR_EMAIL = "Jovenpbenagua@email.com"; // Replace with your actual email
 
 const Contact = () => {
@@ -38,7 +38,8 @@ const Contact = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
       },
       body: JSON.stringify({ messages: userMessages }),
     });
@@ -116,7 +117,7 @@ const Contact = () => {
       );
     } catch (e) {
       console.error(e);
-      setMessages(prev => [...prev, { role: "assistant", content: "Sorry, I'm having trouble connecting right now. Please try again or contact John directly via email." }]);
+      setMessages(prev => [...prev, { role: "assistant", content: "Sorry, I'm having trouble connecting right now. Please try again or contact Joven directly via email." }]);
       setIsLoading(false);
     }
   };
