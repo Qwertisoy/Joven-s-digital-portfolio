@@ -6,20 +6,20 @@ const skillSections = [
   {
     icon: Code2,
     title: "Development",
-    description: "Learning to build web pages using HTML and CSS, creating simple and clear layouts. Practicing Java for basic backend programs and starting to explore JavaScript for interactive features.",
+    description: "Proficient in building web interfaces with HTML and CSS, creating structured and visually appealing layouts. Experienced in Java programming for backend logic and application development, with a focus on clean, maintainable code.",
     tags: ["HTML", "CSS", "Java", "JavaScript Basics"],
   },
   {
     icon: Database,
     title: "Database & Systems",
     description: "Basic knowledge of MySQL for creating and managing small databases. Can write simple SQL queries and beginning to understand how databases support applications.",
-    tags: ["MySQL", "Database Basics", "SQL Queries", "Data Modeling (Beginner)"],
+    tags: ["MySQL", "Database Design", "SQL Queries", "Data Modeling(Beginner)"],
   },
   {
     icon: Globe,
     title: "Networking",
-    description: "Foundational knowledge in networking concepts including TCP/IP, DNS, and basic network troubleshooting. Familiar with network architecture and protocols essential for IT support roles.",
-    tags: ["TCP/IP", "DNS", "Troubleshooting", "Network Fundamentals"],
+    description: "Familiar with basic networking concepts like TCP/IP and DNS. Able to do simple troubleshooting and learning how networks connect devices.",
+    tags: ["TCP/IP", "DNS", "Troubleshooting", "Network Basics"],
   },
   {
     icon: Wrench,
@@ -30,13 +30,13 @@ const skillSections = [
   {
     icon: Terminal,
     title: "IT Support",
-    description: "Enjoy helping with basic computer problems. Can do simple system maintenance like updates and installations. Learning how to document solutions and provide clear instructions.",
+    description: "Passionate about providing technical support and troubleshooting. Experienced in diagnosing hardware and software issues, system maintenance, and helping users resolve technical problems efficiently.",
     tags: ["Troubleshooting", "System Maintenance", "Technical Support", "Documentation"],
   },
   {
     icon: Users,
     title: "Professional Skills",
-    description: "Strong problem-solving abilities combined with adaptability to new technologies. Excellent teamwork and communication skills developed through collaborative academic projects. Committed to continuous learning and professional growth.",
+    description: "Good at solving problems step by step. Work well in teams during school projects. Open to learning new tools and adapting quickly. Manage time effectively and communicate clearly with classmates and project partners.",
     tags: ["Problem Solving", "Teamwork", "Adaptability", "Time Management", "Communication"],
   },
 ];

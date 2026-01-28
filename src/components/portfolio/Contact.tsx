@@ -9,7 +9,7 @@ import { toast } from "sonner";
 type Message = { role: "user" | "assistant"; content: string };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/portfolio-chat`;
-const YOUR_EMAIL = "Jovenpbenagua@email.com"; // Replace with your actual email
+const YOUR_EMAIL = "jovenpbenagua@email.com";
 
 const Contact = () => {
   const ref = useRef(null);
@@ -38,8 +38,7 @@ const Contact = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
       },
       body: JSON.stringify({ messages: userMessages }),
     });
@@ -196,7 +195,7 @@ const Contact = () => {
               initial={{ opacity: 0, x: -30 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
               transition={{ delay: 0.3 }}
-              className="glass rounded-xl overflow-hidden flex flex-col min-h-[500px]"
+              className="glass rounded-xl overflow-hidden flex flex-col h-[500px]"
             >
               {/* Chat Header */}
               <div className="p-4 border-b border-border bg-secondary/50">
@@ -297,11 +296,11 @@ const Contact = () => {
                   </div>
                   <div className="flex items-center gap-3">
                     <MapPin size={18} className="text-primary" />
-                    <span className="text-sm text-muted-foreground">Metro Manila, Philippines</span>
+                    <span className="text-sm text-muted-foreground">Pasig City, Metro Manila, Philippines</span>
                   </div>
                   <div className="flex gap-2">
                     <motion.a
-                      href="https://github.com"
+                      href="https://github.com/Qwertisoy"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-2 rounded-lg bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors"
@@ -311,7 +310,7 @@ const Contact = () => {
                       <Github size={18} />
                     </motion.a>
                     <motion.a
-                      href="https://linkedin.com"
+                      href="www.linkedin.com/in/jovenbenagua"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-2 rounded-lg bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors"

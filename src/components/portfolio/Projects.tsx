@@ -13,7 +13,7 @@ const projects = [
     technologies: ["Java", "MySQL", "NetBeans"],
     role: "Full Stack Developer",
     github: "https://github.com",
-    live: null,
+    live: "https://routemateapp.vercel.app/",
     featured: true,
   },
   {
@@ -24,7 +24,7 @@ const projects = [
     technologies: ["Arduino", "PHP", "MySQL", "Bootstrap"],
     role: "Backend Developer & System Integration",
     github: "https://github.com",
-    live: "https://example.com",
+    live: null,
     featured: true,
   },
   {
@@ -34,8 +34,8 @@ const projects = [
       "A mobile-friendly web application that helps commuters find optimal routes and estimate transportation fares using local transit data.",
     technologies: ["HTML", "CSS", "JavaScript", "Google Maps API"],
     role: "Frontend Developer",
-    github: "https://github.com",
-    live: "https://routemate-final.vercel.app/",
+    github: "https://github.com/Qwertisoy/RouteMate-deploy",
+    live: "https://routemateapp.vercel.app/",
     featured: true,
   },
 ];
@@ -72,7 +72,18 @@ const ProjectCard = ({
               <Github size={20} />
             </a>
           )}
-
+          {project.live && (
+            <a
+              href={project.live}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="View live project"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <ExternalLink size={20} />
+            </a>
+          )}
         </div>
       </div>
 
@@ -159,7 +170,7 @@ const Projects = () => {
               className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
               asChild
             >
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+              <a href="https://github.com/Qwertisoy" target="_blank" rel="noopener noreferrer">
                 View More on GitHub
               </a>
             </Button>

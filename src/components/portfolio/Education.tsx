@@ -8,7 +8,7 @@ const education = [
     title: "Bachelor of Science in Information Technology",
     institution: "Pateros Technological College",
     period: "2022 - Present (Expected 2026)",
-    description: "Focus on software development, database management, and IT infrastructure. School Scholar, Pasig City Scholar.",
+    description: "Focus on software development, database management, and IT infrastructure. Relevant coursework includes Database Management, Systems Analysis, Network Administration, Web Development, and Linux Fundamentals.",
   },
 ];
 
@@ -17,21 +17,20 @@ const experience = [
     type: "experience",
     title: "Data Encoder",
     institution: "K2 Network",
-    period: "Summer 2015-2016",
+    period: "2015 - 2016",
     description: "Assisted with basic data entry and account management tasks. Responsibilities included encoding company information into Excel spreadsheets, creating user accounts, and performing log‑in/log‑out procedures to support system accuracy. Gained hands‑on practice with organizing data, maintaining records, and following standard processes for account handling.",
   },
 ];
 
 const certifications = [
-  "Cisco Networking Basics Certificate",
-  "SQL for Data Science (Coursera)",
   "Introduction to Cybersecurity (Cisco)",
   "Google IT Support Professional Certificate (In Progress)",
 ];
 
 const webinars = [
-  "Web Development Best Practices 2024",
+  "Introduction to Cloud Computing - AWS",
   "Cybersecurity Fundamentals Workshop",
+  "Agile & Scrum for IT Projects",
   "Database Design & Optimization Seminar",
 ];
 

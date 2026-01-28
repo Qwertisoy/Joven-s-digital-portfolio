@@ -42,7 +42,7 @@ const Hero = () => {
                   {/* Replace this with your actual image */}
                   <img
                     src="/12345joven.jpg"
-                    alt="Joven P. Benagua - BSIT Student"
+                    alt="Joven Benagua - BSIT Student"
                     className="w-full h-full object-cover rounded-full"
                   />
                 </div>
@@ -71,7 +71,7 @@ const Hero = () => {
             className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6"
           >
             Hi, I'm{" "}
-            <span className="text-gradient">Joven P. Benagua</span>
+            <span className="text-gradient">Joven Benagua</span>
           </motion.h1>
 
           {/* Tagline */}
@@ -81,7 +81,7 @@ const Hero = () => {
             transition={{ delay: 0.4 }}
             className="text-xl md:text-2xl text-muted-foreground mb-4"
           >
-            BSIT Student | Ready to take on challenges
+            BSIT Student | Aspiring IT, Backend, Systems Specialist & Cybersecurity Specialist
           </motion.p>
 
           {/* Description */}
@@ -131,8 +131,8 @@ const Hero = () => {
             className="flex items-center justify-center gap-4"
           >
             {[
-              { icon: Github, href: "https://github.com/Qwetisoy", label: "GitHub" },
-              { icon: Linkedin, href: "https://linkedin.com/in/jovenbenagua", label: "LinkedIn" },
+              { icon: Github, href: "https://github.com/Qwertisoy", label: "GitHub" },
+              { icon: Linkedin, href: "www.linkedin.com/in/jovenbenagua", label: "LinkedIn" },
               { icon: Mail, href: "mailto:jovenpbenagua@email.com", label: "Email" },
             ].map(({ icon: Icon, href, label }) => (
               <motion.a
